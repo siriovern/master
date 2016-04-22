@@ -11,7 +11,10 @@ start = [0 for i in range(n)]
 kT = tempS*(1.38064852e23)
 maxProb = math.exp(-4/kT)
 
-for i in range(n):=-1
+for i in range(n):
+    randomFloat = random.uniform(0,1)
+    if randomFloat < 0.5:
+        start[i]=-1
     else:
         start[i]=1
 
