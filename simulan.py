@@ -35,7 +35,7 @@ def numreactions(reactions):
             #godta uansett
             value = reactions
 
-    return (reactions, value)
+    return (reactionsNew, value)
 
 #best results so far
 allReactions = [0] * n
@@ -46,7 +46,7 @@ for i in range(n):
     prob = math.exp(-deltaE/kT)
     if (random.random()<prob):
         current = new
-        allReactions[i] = current
+    allReactions[i] = current
     kT = kT-0.1
 
 print allReactions
