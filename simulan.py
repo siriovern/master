@@ -7,11 +7,13 @@ import numpy as np
 # boltzmann at start
 kT = 10
 #number of cycles
-n = 90
+n = 1000
 #number of trials per cycle
-m = 50
+m = 100
 #boltzmann at the end
-kTend = 1
+kTend = 0.5
+#fractional reduction every cycle
+fract = (kTend/kT)**(1.0/(n-1.0))
 
 avgList = list()
 start = 2000
@@ -43,29 +45,37 @@ def numreactions(reactions):
     return (reactionsNew, value)
 
 #best results so far
-allReactions = [0] * n
-allTemperatures = [0] * n
-
+allReactions = []
+allTemperatures = []
+stDev = []
 
 for i in range(n):
-    while kT >= kTend:
-        for j in range(m):
 
-            new, rxValue = numreactions(current)
-            deltaE = abs(start-rxValue)
-            prob = math.exp(-deltaE/kT)
-            if (random.random()<prob):
-                current = new
-                avgList.append(current)
-            else:
-                continue
+    for j in range(m):
 
+        new, rxValue = numreactions(current)
+        deltaE = abs(start-rxValue)
+        prob = math.exp(-deltaE/kT)
+        if (random.random()<prob):
+            avgList.append(new)
+        else:
+            continue
+
+
+    if np.mean(avgList) == 0:
+        allReactions.append(avgNumber)
+    else:
         avgNumber = np.mean(avgList)
-        avgList = []
-        allReactions[i] = avgNumber
-        xAxis = (1/kT)
-        allTemperatures[i] = xAxis
-        kT = kT-0.1
+        allReactions.append(avgNumber)
+    avgList = []
+    current = avgNumber
+    xAxis = (1.0/kT)
+    allTemperatures.append(xAxis)
+    #if kT >= kTend:
+    kT = kT * fract
+
+    stdevValue = np.std(allReactions)
+    stDev.append(stdevValue)
 
 stdev = [0]*n
 #stdev
@@ -74,8 +84,18 @@ stdev = [0]*n
 
 print allReactions
 print allTemperatures
+print stDev
 
-plt.scatter(allTemperatures,allReactions)
-plt.axis([0,1, 1990,2010])
+rx = plt.figure()
+plt.scatter(allTemperatures,allReactions, s=1)
+plt.axis([0,2,1998,2003])
+plt.xlabel('1/T')
+plt.ylabel('number of reactions')
+
+st = plt.figure()
+plt.plot(allTemperatures,stDev)
+plt.xlabel('1/T')
+
 plt.show()
+
 
