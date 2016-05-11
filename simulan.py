@@ -11,7 +11,7 @@ n = 1000
 #number of trials per cycle
 m = 100
 #boltzmann at the end
-kTend = 0.5
+kTend = 1.0
 #fractional reduction every cycle
 fract = (kTend/kT)**(1.0/(n-1.0))
 
@@ -77,23 +77,20 @@ for i in range(n):
     stdevValue = np.std(allReactions)
     stDev.append(stdevValue)
 
-stdev = [0]*n
-#stdev
-#for i in range(n):
- #   stdev[i] =
-
 print allReactions
 print allTemperatures
 print stDev
 
 rx = plt.figure()
 plt.scatter(allTemperatures,allReactions, s=1)
-plt.axis([0,2,1998,2003])
+plt.axis([0,1.1,1998,2003])
 plt.xlabel('1/T')
 plt.ylabel('number of reactions')
+plt.axhline(y=2000,c="blue",linewidth=0.5,zorder=0)
 
 st = plt.figure()
 plt.plot(allTemperatures,stDev)
+plt.axis([0,1.1, 0,0.5])
 plt.xlabel('1/T')
 
 plt.show()
