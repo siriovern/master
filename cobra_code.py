@@ -5,10 +5,19 @@ import cobra.test
 import pandas
 
 model = cobra.test.create_test_model(cobra.test.salmonella_pickle)
+# laste inn naavaerende modell
+# laste inn univers
 
 def numberofreactions():
 
     numberReactions = len(model.reactions) # antall reaksjoner i model
+
+    biomass = model.objective # = 1 hvis modellen produserer biomass
+
+    print biomass
+
+   # if biomass == 'Reaction biomass_iRR1083_metals at 0x75f9790>: 1.0':
+    #    print 'hurra'
 
     addOrRemove = random.random()
 
@@ -21,7 +30,6 @@ def numberofreactions():
         print numberReactions
 
 
-
     return (numberReactions)
 
 def numberofblockedreactions():
@@ -31,3 +39,7 @@ def numberofblockedreactions():
     blockedReactions = 1
 
     return(blockedReactions)
+
+
+n =  numberofreactions()
+print n
