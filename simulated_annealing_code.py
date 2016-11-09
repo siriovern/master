@@ -6,7 +6,7 @@ import random
 from cobra_code import numberofreactions
 from cobra_code import numberofblockedreactions
 
-temp1 = 1 # for antall reaksjoiner
+temp1 = 100000 # for antall reaksjoiner
 temp2 = 1 # for blokkerte reaksjoner. Holdes konstant
 
 optimalReactions = 1 # onsket antall reaksjoner
@@ -26,12 +26,14 @@ while temp1 != 0:
             randomNumber1 = random.random()
             if randomNumber1 > p1:
                 print nReactions
-                # forkast sletting av reaksjon
+                print 'ingen endring'
+                # ikke aksepter endring
             else:
-                # behold endringer
-                print nReactions
+                # aksepter endring
+                print 'printer ny modell'
         else:
             print nReactions
+            print 'aksepterer endringer uansett'
             # keep
 
         if nBlocked > optimalBlocked:
@@ -47,5 +49,5 @@ while temp1 != 0:
         else:
             print nBlocked
             # keep
-    temp1 = temp1 -0.1
+    temp1 = temp1 - 1000
 
