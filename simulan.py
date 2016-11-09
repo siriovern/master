@@ -7,9 +7,9 @@ import numpy as np
 # boltzmann at start
 kT = 10
 #number of cycles
-n = 1000
+n = 4000
 #number of trials per cycle
-m = 100
+m = 20
 #boltzmann at the end
 kTend = 1.0
 #fractional reduction every cycle
@@ -23,13 +23,13 @@ current = start
 def numreactions(reactions):
 
     randomNumber = random.random()
-    value = reactions
+    #value = reactions
     # legger til en reaksjon
     if randomNumber >= 0.5:
         reactionsNew = reactions + 1
         if reactionsNew < 2000:
             #godta uansett
-            value = reactions
+            value = -1
         if reactionsNew >= 2000:
             #som vanlig
             value = reactionsNew
@@ -40,7 +40,7 @@ def numreactions(reactions):
             value = reactionsNew
         if reactionsNew >= 2000:
             #godta uansett
-            value = reactions
+            value = -1
 
     return (reactionsNew, value)
 
@@ -50,17 +50,17 @@ allTemperatures = []
 stDev = []
 
 for i in range(n):
-
     for j in range(m):
-
         new, rxValue = numreactions(current)
-        deltaE = abs(start-rxValue)
-        prob = math.exp(-deltaE/kT)
-        if (random.random()<prob):
+        if rxValue == -1:
             avgList.append(new)
         else:
-            continue
-
+            deltaE = abs(current-new)
+            prob = math.exp(-deltaE/kT)
+            if (random.random()<prob):
+                avgList.append(new)
+            else:
+                continue
 
     if np.mean(avgList) == 0:
         allReactions.append(avgNumber)
@@ -71,8 +71,8 @@ for i in range(n):
     current = avgNumber
     xAxis = (1.0/kT)
     allTemperatures.append(xAxis)
-    #if kT >= kTend:
-    kT = kT * fract
+    if kT >= kTend:
+        kT = kT * fract
 
     stdevValue = np.std(allReactions)
     stDev.append(stdevValue)
@@ -90,7 +90,7 @@ plt.axhline(y=2000,c="blue",linewidth=0.5,zorder=0)
 
 st = plt.figure()
 plt.plot(allTemperatures,stDev)
-plt.axis([0,1.1, 0,0.5])
+#plt.axis([0,1.1, 0,0.5])
 plt.xlabel('1/T')
 
 plt.show()
