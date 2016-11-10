@@ -2,7 +2,10 @@ __author__ = 'Siri'
 
 import random
 import cobra.test
+#from cobra.io.mat import model_to_pymatbridge
+
 import pandas
+#model_to_pymatbridge(m, variable_name="model")
 
 model = cobra.test.create_test_model(cobra.test.salmonella_pickle)
 # laste inn naavaerende modell
@@ -10,9 +13,15 @@ model = cobra.test.create_test_model(cobra.test.salmonella_pickle)
 
 def numberofreactions():
 
+
     numberReactions = len(model.reactions) # antall reaksjoner i model
 
     biomass = model.objective # = 1 hvis modellen produserer biomass
+    opt = model.optimize()
+
+    print 'her kommer opt.f:'
+    print opt.f
+    print model.solution.f
 
     print biomass
 
