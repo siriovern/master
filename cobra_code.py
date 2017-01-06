@@ -5,10 +5,10 @@ import cobra.test
 import copy
 #from cobra.io.mat import model_to_pymatbridge
 
-import pandas
+#import pandas
 #model_to_pymatbridge(m, variable_name="model")
 
-from cobra import Reaction
+#from cobra import Reaction
 
 salmonella = cobra.test.create_test_model(cobra.test.salmonella_pickle)
 model = copy.copy(salmonella)
@@ -31,13 +31,13 @@ def numberofreactions():
 
         reactionNr = random.randint(1, nUniverse)
         react = (universe.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
-        reaction = Reaction(react)
+        #reaction = Reaction(react)
         print 'reaksjoner i modell: %d' % (nModel)
         print 'reaksjoner i univers: %d' % (nUniverse)
 
-        print reaction
+       # print reaction
 
-        model.add_reaction(reaction) #legger til reaksjon i modell
+        model.add_reaction(react) #legger til reaksjon i modell
         universe.reactions.remove(react) #fjerner reaksjon fra univers
 
 
@@ -53,11 +53,11 @@ def numberofreactions():
         print 'fjerner reaksjon'
         reactionNr = random.randint(1, nModel)
         react = (model.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
-        reaction = Reaction(react)
+        #reaction = Reaction(react)
         print 'reaksjoner i modell: %d' % (nModel)
         print 'reaksjoner i univers: %d' % (nUniverse)
 
-        universe.add_reaction(reaction) #legger til reaksjon i modell
+        universe.add_reaction(react) #legger til reaksjon i modell
         model.reactions.remove(react) #fjerner reaksjon fra univers
 
 
