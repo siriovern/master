@@ -3,6 +3,9 @@ __author__ = 'Siri'
 import random
 import cobra.test
 import copy
+from cobra import Reaction
+#from cobra import solvers
+
 #from cobra.io.mat import model_to_pymatbridge
 
 #import pandas
@@ -15,6 +18,7 @@ universe = cobra.io.read_sbml_model('C:\Users\Siri\SkyDrive\NTNU\_master\univers
 def biomassproduced(currentModel):
     currentModel.optimize()
     print 'er inne i drittfunksjonen'
+    print currentModel.solution.f
     if currentModel.solution.status == 'optimal':
         return True
     else:
@@ -74,12 +78,18 @@ def numberofblockedreactions():
 
     # finn antall blokkerte raksjoner fra navaerende modell M
     # enklest: sjekke flux for ALLE reaksjoner (veldig tregt!)
-    blockedReactions = 1
+    blockedReactions = 0
+    nModel = len(model.reactions)
+    for i in range(0,nModel-1):
+        reaction = copy.copy(model.reactions[i])
+        if reaction.lower_bound == 0 and reaction.upper_bound == 0:
+            blockedReactions += 1
 
     return(blockedReactions)
 
 
-n =  numberofreactions()
-print n
+#n =  numberofreactions()
+#print n
 
-
+#m = numberofblockedreactions()
+#print m

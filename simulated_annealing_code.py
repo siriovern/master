@@ -8,11 +8,8 @@ from cobra_code import numberofblockedreactions
 
 temp1 = 100000 # for antall reaksjoiner
 temp2 = 1 # for blokkerte reaksjoner. Holdes konstant
-
 optimalReactions = 1 # onsket antall reaksjoner
 optimalBlocked = 1 # maks antall blokkerte reaksjoner
-
-
 n=1 # Antall sykler per temp. Like mange som antall reaksjoner i opprinnelig modell?
 
 while temp1 != 0:
