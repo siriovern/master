@@ -8,14 +8,19 @@ import copy
 #import pandas
 #model_to_pymatbridge(m, variable_name="model")
 
-#from cobra import Reaction
-
 salmonella = cobra.test.create_test_model(cobra.test.salmonella_pickle)
 model = copy.copy(salmonella)
 universe = cobra.io.read_sbml_model('C:\Users\Siri\SkyDrive\NTNU\_master\universe_mnx.xml')
 
-def numberofreactions():
+def biomassproduced(currentModel):
+    currentModel.optimize()
+    print 'er inne i drittfunksjonen'
+    if currentModel.solution.status == 'optimal':
+        return True
+    else:
+        return False
 
+def numberofreactions():
 
     biomass = model.objective # = 1 hvis modellen produserer biomass
     print 'biomass: 1 if biomass:'
@@ -25,53 +30,45 @@ def numberofreactions():
     nModel = len(model.reactions) # antall reaksjoner i model
     nUniverse = len(universe.reactions)
 
-    if addOrRemove >= 0.5: # add reaction
+    if addOrRemove >= 0.9: # add reaction
 
         print 'legger til reaksjon'
-
         reactionNr = random.randint(1, nUniverse)
         react = (universe.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
-        #reaction = Reaction(react)
         print 'reaksjoner i modell: %d' % (nModel)
         print 'reaksjoner i univers: %d' % (nUniverse)
-
-       # print reaction
 
         model.add_reaction(react) #legger til reaksjon i modell
         universe.reactions.remove(react) #fjerner reaksjon fra univers
 
-
         mModel = len(model.reactions) #sjeker ny lengde
         print 'reaksjoner i modell er naa: %d' % (mModel)
         mUniverse =  len(universe.reactions) #ny lengde univers
         print 'reaksjoner i unvers er naa: %d' % (mUniverse)
-
 
         return mModel
     else:
-        # remove reaction
         print 'fjerner reaksjon'
-        reactionNr = random.randint(1, nModel)
-        react = (model.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
-        #reaction = Reaction(react)
-        print 'reaksjoner i modell: %d' % (nModel)
-        print 'reaksjoner i univers: %d' % (nUniverse)
+        biomassProduced = 0
+        while biomassProduced == 0:
+            reactionNr = random.randint(1, nModel)
+            react = (model.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
+            print 'reaksjoner i modell: %d' % (nModel)
+            print 'reaksjoner i univers: %d' % (nUniverse)
 
-        universe.add_reaction(react) #legger til reaksjon i modell
-        model.reactions.remove(react) #fjerner reaksjon fra univers
+            universe.add_reaction(react) #legger til reaksjon i modell
+            model.reactions.remove(react) #fjerner reaksjon fra univers
 
+            mModel = len(model.reactions) #sjeker ny lengde
+            print 'reaksjoner i modell er naa: %d' % (mModel)
+            mUniverse =  len(universe.reactions) #ny lengde univers
+            print 'reaksjoner i unvers er naa: %d' % (mUniverse)
+            stillproducingbiomass = biomassproduced(model)
 
-        mModel = len(model.reactions) #sjeker ny lengde
-        print 'reaksjoner i modell er naa: %d' % (mModel)
-        mUniverse =  len(universe.reactions) #ny lengde univers
-        print 'reaksjoner i unvers er naa: %d' % (mUniverse)
+            if stillproducingbiomass == True:
+                biomassProduced = 1
 
-
-        # kan modellen fremdeles produsere biomass?
-        print mModel
-
-
-    return (mModel)
+        return mModel
 
 def numberofblockedreactions():
 
@@ -84,3 +81,5 @@ def numberofblockedreactions():
 
 n =  numberofreactions()
 print n
+
+
