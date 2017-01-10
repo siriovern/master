@@ -5,32 +5,34 @@ import math
 import random
 from cobra_code import numberofreactions
 from cobra_code import numberofblockedreactions
+from cobra_code import startreactions
+from cobra_code import lastmodel
 
 temp1 = 100000 # for antall reaksjoiner
 temp2 = 1 # for blokkerte reaksjoner. Holdes konstant
-optimalReactions = 1 # onsket antall reaksjoner
-optimalBlocked = 1 # maks antall blokkerte reaksjoner
+optimalReactions = 2546 # onsket antall reaksjoner
+optimalBlocked = 14 # maks antall blokkerte reaksjoner
 n=1 # Antall sykler per temp. Like mange som antall reaksjoner i opprinnelig modell?
+nReactions = startreactions()
 
 while temp1 != 0:
 
     for i in range(n):
+        #lastSolution = nReactions
         nReactions = numberofreactions() #kaller funksjon fra cobra_code
         nBlocked = numberofblockedreactions()
         if nReactions != optimalReactions:
             deltaN = math.fabs(optimalReactions-nReactions)
             p1 = math.exp(-deltaN/temp1) # sannsynlighet som funksjon av t1
             randomNumber1 = random.random()
-            if randomNumber1 > p1:
-                print nReactions
-                print 'ingen endring'
+            if randomNumber1 < p1:
+                lastSolution = lastmodel()
+                print 'ingen endring. Fremdeles: %i' % (lastSolution)
                 # ikke aksepter endring
             else:
-                # aksepter endring
-                print 'printer ny modell'
+                print 'printer ny modell: %i' %(nReactions) #keep
         else:
-            print nReactions
-            print 'aksepterer endringer uansett'
+            print 'Optimalt antall reaksjoner: %i' %(nReactions)
             # keep
 
         if nBlocked > optimalBlocked:

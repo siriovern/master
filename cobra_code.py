@@ -13,66 +13,78 @@ from cobra import Reaction
 
 salmonella = cobra.test.create_test_model(cobra.test.salmonella_pickle)
 model = copy.copy(salmonella)
+startModel = copy.copy(model)
 universe = cobra.io.read_sbml_model('C:\Users\Siri\SkyDrive\NTNU\_master\universe_mnx.xml')
+modelList = []
+modelList.append(model)
 
 def biomassproduced(currentModel):
     currentModel.optimize()
-    print 'er inne i drittfunksjonen'
-    print currentModel.solution.f
+    #print 'er inne i drittfunksjonen'
+    #print currentModel.solution.f
     if currentModel.solution.status == 'optimal':
         return True
     else:
         return False
 
-def numberofreactions():
+def startreactions():
+    return (len(startModel.reactions))
 
-    biomass = model.objective # = 1 hvis modellen produserer biomass
-    print 'biomass: 1 if biomass:'
-    print biomass
+def lastmodel():
+    iterations = len(modelList)
+    lastModel = modelList[iterations-1]
+    modelList.pop()
+    model = copy.copy(lastModel)
+    return (len(model.reactions))
+
+
+def numberofreactions():
 
     addOrRemove = random.random()
     nModel = len(model.reactions) # antall reaksjoner i model
     nUniverse = len(universe.reactions)
 
-    if addOrRemove >= 0.9: # add reaction
+    for i in range(0,3):
 
-        print 'legger til reaksjon'
-        reactionNr = random.randint(1, nUniverse)
-        react = (universe.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
-        print 'reaksjoner i modell: %d' % (nModel)
-        print 'reaksjoner i univers: %d' % (nUniverse)
+        if addOrRemove >= 0.5: # add reaction
 
-        model.add_reaction(react) #legger til reaksjon i modell
-        universe.reactions.remove(react) #fjerner reaksjon fra univers
+            print 'legger til reaksjon'
+            reactionNr = random.randint(1, nUniverse)
+            react = (universe.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
+            #print 'reaksjoner i modell: %d' % (nModel)
+            #print 'reaksjoner i univers: %d' % (nUniverse)
 
-        mModel = len(model.reactions) #sjeker ny lengde
-        print 'reaksjoner i modell er naa: %d' % (mModel)
-        mUniverse =  len(universe.reactions) #ny lengde univers
-        print 'reaksjoner i unvers er naa: %d' % (mUniverse)
-
-        return mModel
-    else:
-        print 'fjerner reaksjon'
-        biomassProduced = 0
-        while biomassProduced == 0:
-            reactionNr = random.randint(1, nModel)
-            react = (model.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
-            print 'reaksjoner i modell: %d' % (nModel)
-            print 'reaksjoner i univers: %d' % (nUniverse)
-
-            universe.add_reaction(react) #legger til reaksjon i modell
-            model.reactions.remove(react) #fjerner reaksjon fra univers
+            model.add_reaction(react) #legger til reaksjon i modell
+            universe.reactions.remove(react) #fjerner reaksjon fra univers
 
             mModel = len(model.reactions) #sjeker ny lengde
-            print 'reaksjoner i modell er naa: %d' % (mModel)
+            #print 'reaksjoner i modell er naa: %d' % (mModel)
             mUniverse =  len(universe.reactions) #ny lengde univers
-            print 'reaksjoner i unvers er naa: %d' % (mUniverse)
-            stillproducingbiomass = biomassproduced(model)
+            #print 'reaksjoner i unvers er naa: %d' % (mUniverse)
 
-            if stillproducingbiomass == True:
-                biomassProduced = 1
+        else:
+            print 'fjerner reaksjon'
+            biomassProduced = 0
+            while biomassProduced == 0:
+                reactionNr = random.randint(1, nModel)
+                react = (model.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
+                #print 'reaksjoner i modell: %d' % (nModel)
+                #print 'reaksjoner i univers: %d' % (nUniverse)
 
-        return mModel
+                universe.add_reaction(react) #legger til reaksjon i modell
+                model.reactions.remove(react) #fjerner reaksjon fra univers
+
+                mModel = len(model.reactions) #sjeker ny lengde
+                #print 'reaksjoner i modell er naa: %d' % (mModel)
+                mUniverse =  len(universe.reactions) #ny lengde univers
+                #print 'reaksjoner i unvers er naa: %d' % (mUniverse)
+                stillproducingbiomass = biomassproduced(model)
+
+                if stillproducingbiomass == True:
+                    biomassProduced = 1
+
+        modelList.append(model)
+    return mModel
 
 def numberofblockedreactions():
 
@@ -82,13 +94,15 @@ def numberofblockedreactions():
     nModel = len(model.reactions)
     for i in range(0,nModel-1):
         reaction = copy.copy(model.reactions[i])
-        if reaction.lower_bound == 0 and reaction.upper_bound == 0:
+        upper = reaction.upper_bound
+        lower = reaction.lower_bound
+        if upper == 0 and lower == 0:
             blockedReactions += 1
 
     return(blockedReactions)
 
 
-#n =  numberofreactions()
+n =  numberofreactions()
 #print n
 
 #m = numberofblockedreactions()
