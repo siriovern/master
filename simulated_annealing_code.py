@@ -15,7 +15,7 @@ temp1 = 10000 # for antall reaksjoiner
 temp2 = 1 # for blokkerte reaksjoner. Holdes konstant
 optimalReactions = 2456 # onsket antall reaksjoner
 optimalBlocked = 14 # maks antall blokkerte reaksjoner
-n=1 #Antall sykler per temp. Like mange som antall reaksjoner i opprinnelig modell?
+n=2 #Antall sykler per temp. Like mange som antall reaksjoner i opprinnelig modell?
 nReactions =0
 nBlocked =0
 
