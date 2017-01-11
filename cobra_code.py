@@ -17,6 +17,7 @@ model = copy.copy(salmonella)
 universe = cobra.io.read_sbml_model('C:\Users\Siri\SkyDrive\NTNU\_master\universe_mnx.xml')
 lastModel = model.copy()
 
+
 def biomassproduced(currentModel):
     currentModel.optimize()
     #print 'er inne i drittfunksjonen'
@@ -28,10 +29,7 @@ def biomassproduced(currentModel):
 
 
 def lastmodel():
-    #iterations = len(modelList)
-    #lastModel = modelList[iterations-1]
-    #modelList.pop()
-    #model = copy.copy(lastModel)
+    universe.add_reaction(react)
     model = lastModel.copy()
     return (len(model.reactions))
 
@@ -47,8 +45,8 @@ def numberofreactions():
 
     if addOrRemove >= 0.5: # add reaction
 
-        print 'legger til reaksjon'
-        reactionNr = random.randint(1, nUniverse)
+        #print 'legger til reaksjon'
+        reactionNr = random.randint(0, nUniverse-1)
         react = (universe.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
         #print 'reaksjoner i modell: %d' % (nModel)
         #print 'reaksjoner i univers: %d' % (nUniverse)
@@ -62,15 +60,16 @@ def numberofreactions():
         #print 'reaksjoner i unvers er naa: %d' % (mUniverse)
 
     else:
-        print 'fjerner reaksjon'
+        #print 'fjerner reaksjon'
         biomassProduced = 0
         while biomassProduced == 0:
-            reactionNr = random.randint(1, nModel)
+            reactionNr = random.randint(0, nModel-1)
             react = (model.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
             #print 'reaksjoner i modell: %d' % (nModel)
             #print 'reaksjoner i univers: %d' % (nUniverse)
-
+            #print reactionNr
             universe.add_reaction(react) #legger til reaksjon i modell
+            #print len(universe.reactions)
             model.reactions.remove(react) #fjerner reaksjon fra univers
 
             mModel = len(model.reactions) #sjeker ny lengde
@@ -93,7 +92,7 @@ def numberofblockedreactions():
     blockedReactions = 0
     nModel = len(model.reactions)
     for i in range(0,nModel-1):
-        reaction = copy.copy(model.reactions[i])
+        reaction = copy.deepcopy(model.reactions[i])
         upper = reaction.upper_bound
         lower = reaction.lower_bound
         if upper == 0 and lower == 0:
