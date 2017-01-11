@@ -16,7 +16,7 @@ model = copy.copy(salmonella)
 
 universe = cobra.io.read_sbml_model('C:\Users\Siri\SkyDrive\NTNU\_master\universe_mnx.xml')
 lastModel = model.copy()
-
+react = ()
 
 def biomassproduced(currentModel):
     currentModel.optimize()
@@ -29,7 +29,7 @@ def biomassproduced(currentModel):
 
 
 def lastmodel():
-    universe.add_reaction(react)
+    #universe.add_reaction(react)
     model = lastModel.copy()
     return (len(model.reactions))
 
