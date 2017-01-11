@@ -11,7 +11,7 @@ from cobra_code import lastmodel
 
 startTime=time.time()
 
-temp1 = 100 # for antall reaksjoiner
+temp1 = 10000 # for antall reaksjoiner
 temp2 = 1 # for blokkerte reaksjoner. Holdes konstant
 optimalReactions = 2456 # onsket antall reaksjoner
 optimalBlocked = 14 # maks antall blokkerte reaksjoner
