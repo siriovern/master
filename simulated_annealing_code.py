@@ -4,6 +4,7 @@ __author__ = 'Siri'
 import math
 import random
 import time
+
 from cobra_code import numberofreactions
 from cobra_code import numberofblockedreactions
 
@@ -15,7 +16,7 @@ temp1 = 10000 # for antall reaksjoiner
 temp2 = 1 # for blokkerte reaksjoner. Holdes konstant
 optimalReactions = 2456 # onsket antall reaksjoner
 optimalBlocked = 14 # maks antall blokkerte reaksjoner
-n=2 #Antall sykler per temp. Like mange som antall reaksjoner i opprinnelig modell?
+n=5 #Antall sykler per temp. Like mange som antall reaksjoner i opprinnelig modell?
 nReactions =0
 nBlocked =0
 
@@ -32,6 +33,7 @@ while temp1 != 0:
             randomNumber1 = random.random()
             if randomNumber1 > p1:
                 lastSolution = lastmodel()
+                print '%i reaksjoner for, %i reaksjoner etter' %(nReactions, lastSolution)
                 #print 'ingen endring. Fremdeles: %i' % (lastSolution)
                 # ikke aksepter endring
             else:
@@ -48,7 +50,6 @@ while temp1 != 0:
             randomNumber2 = random.random()
             if randomNumber2 > p2:
                 nBlocked = lastmodel()
-                #print nBlocked
                 # forkast sletting av reaksjon
             else:
                 #print nBlocked

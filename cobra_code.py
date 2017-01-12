@@ -12,83 +12,69 @@ from cobra import Reaction
 #model_to_pymatbridge(m, variable_name="model")
 
 salmonella = cobra.test.create_test_model(cobra.test.salmonella_pickle)
+
 model = copy.copy(salmonella)
 
 universe = cobra.io.read_sbml_model('C:\Users\Siri\SkyDrive\NTNU\_master\universe_mnx.xml')
 lastModel = model.copy()
-react = ()
+react = model.reactions[0]
+lastUniverse = universe.copy()
 
-def biomassproduced(currentModel):
-    currentModel.optimize()
-    #print 'er inne i drittfunksjonen'
-    #print currentModel.solution.f
-    if currentModel.solution.status == 'optimal':
+
+def biomassproduced(currentmodel):
+    currentmodel.optimize()
+    if currentmodel.solution.status == 'optimal':
         return True
     else:
         return False
 
 
 def lastmodel():
-    #universe.add_reaction(react)
+    universe = lastUniverse.copy()
     model = lastModel.copy()
     return (len(model.reactions))
 
+def updatelast(mod):
+    lastMod = mod.copy()
+    return lastMod
 
 def numberofreactions():
-
     addOrRemove = random.random()
-    nModel = len(model.reactions) # antall reaksjoner i model
+    nModel = len(model.reactions)
     nUniverse = len(universe.reactions)
-    lastModel = model.copy()
-
-
-
+    lastModel = updatelast(model)
+    lastUniverse = updatelast(universe)
     if addOrRemove >= 0.5: # add reaction
-
-        #print 'legger til reaksjon'
         reactionNr = random.randint(0, nUniverse-1)
         react = (universe.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
-        #print 'reaksjoner i modell: %d' % (nModel)
-        #print 'reaksjoner i univers: %d' % (nUniverse)
-
         model.add_reaction(react) #legger til reaksjon i modell
         universe.reactions.remove(react) #fjerner reaksjon fra univers
-
         mModel = len(model.reactions) #sjeker ny lengde
-        #print 'reaksjoner i modell er naa: %d' % (mModel)
-        mUniverse =  len(universe.reactions) #ny lengde univers
-        #print 'reaksjoner i unvers er naa: %d' % (mUniverse)
-
+        #mUniverse =  len(universe.reactions)
     else:
-        #print 'fjerner reaksjon'
         biomassProduced = 0
+
         while biomassProduced == 0:
-            reactionNr = random.randint(0, nModel-1)
+            reactionNr = random.randint(0, len(model.reactions)-1)
             react = (model.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
-            #print 'reaksjoner i modell: %d' % (nModel)
-            #print 'reaksjoner i univers: %d' % (nUniverse)
-            #print reactionNr
+            print 'fjerner reaksjon nr %i i modell med %i reaksjoner' %(reactionNr, len(model.reactions))
             universe.add_reaction(react) #legger til reaksjon i modell
-            #print len(universe.reactions)
             model.reactions.remove(react) #fjerner reaksjon fra univers
-
+            print 'la til reaksjon. naa er det: %i' %(len(model.reactions))
             mModel = len(model.reactions) #sjeker ny lengde
-            #print 'reaksjoner i modell er naa: %d' % (mModel)
-            mUniverse =  len(universe.reactions) #ny lengde univers
-            #print 'reaksjoner i unvers er naa: %d' % (mUniverse)
+            #mUniverse =  len(universe.reactions) #ny lengde univers
             stillproducingbiomass = biomassproduced(model)
-
             if stillproducingbiomass == True:
                 biomassProduced = 1
+            else:
+                universe.reactions.remove(react)
+                model.add_reaction(react)
+                print 'La reaksjon tilbake igjen. Modellen har fremdeles %i reaksjoner. HURRA' %(len(model.reactions))
 
-
-        #modelList.append(model.copy())
     return mModel
 
-def numberofblockedreactions():
 
-    # finn antall blokkerte raksjoner fra navaerende modell M
-    # enklest: sjekke flux for ALLE reaksjoner (veldig tregt!)
+def numberofblockedreactions():
     blockedReactions = 0
     nModel = len(model.reactions)
     for i in range(0,nModel-1):
@@ -97,12 +83,10 @@ def numberofblockedreactions():
         lower = reaction.lower_bound
         if upper == 0 and lower == 0:
             blockedReactions += 1
-
-    #print 'hvis du ser dette, er det bra'
     return(blockedReactions)
 
 
-n =  numberofreactions()
+#n =  numberofreactions()
 #print n
 
 #m = numberofblockedreactions()
