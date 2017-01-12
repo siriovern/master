@@ -32,11 +32,13 @@ def biomassproduced(currentmodel):
 def lastmodel():
     universe = lastUniverse.copy()
     model = lastModel.copy()
-    return (len(model.reactions))
+    return (len(lastModel.reactions))
+
 
 def updatelast(mod):
     lastMod = mod.copy()
     return lastMod
+
 
 def numberofreactions():
     addOrRemove = random.random()
@@ -57,16 +59,17 @@ def numberofreactions():
         while biomassProduced == 0:
             reactionNr = random.randint(0, len(model.reactions)-1)
             react = (model.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
-            print 'fjerner reaksjon nr %i i modell med %i reaksjoner' %(reactionNr, len(model.reactions))
+            #print 'fjerner reaksjon nr %i i modell med %i reaksjoner' %(reactionNr, len(model.reactions))
             universe.add_reaction(react) #legger til reaksjon i modell
             model.reactions.remove(react) #fjerner reaksjon fra univers
-            print 'la til reaksjon. naa er det: %i' %(len(model.reactions))
+            #print 'la til reaksjon. naa er det: %i' %(len(model.reactions))
             mModel = len(model.reactions) #sjeker ny lengde
             #mUniverse =  len(universe.reactions) #ny lengde univers
             stillproducingbiomass = biomassproduced(model)
             if stillproducingbiomass == True:
                 biomassProduced = 1
             else:
+                print len(model.reactions)
                 universe.reactions.remove(react)
                 model.add_reaction(react)
                 print 'La reaksjon tilbake igjen. Modellen har fremdeles %i reaksjoner. HURRA' %(len(model.reactions))

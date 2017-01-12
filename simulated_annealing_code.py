@@ -24,7 +24,7 @@ nBlocked =0
 while temp1 != 0:
 
     for i in range(n):
-        #lastSolution = nReactions
+
         nReactions = numberofreactions() #kaller funksjon fra cobra_code
         nBlocked = numberofblockedreactions()
         if nReactions != optimalReactions:
