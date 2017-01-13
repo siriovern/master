@@ -16,9 +16,9 @@ salmonella = cobra.test.create_test_model(cobra.test.salmonella_pickle)
 model = copy.copy(salmonella)
 
 universe = cobra.io.read_sbml_model('C:\Users\Siri\SkyDrive\NTNU\_master\universe_mnx.xml')
-lastModel = model.copy()
+lastModel = model
 react = model.reactions[0]
-lastUniverse = universe.copy()
+lastUniverse = universe
 
 
 def biomassproduced(currentmodel):
@@ -41,6 +41,7 @@ def updatelast(mod):
 
 
 def numberofreactions():
+
     addOrRemove = random.random()
     nModel = len(model.reactions)
     nUniverse = len(universe.reactions)
@@ -89,7 +90,8 @@ def numberofblockedreactions():
     return(blockedReactions)
 
 
-#n =  numberofreactions()
+n =  numberofreactions()
+m = lastmodel()
 #print n
 
 #m = numberofblockedreactions()
