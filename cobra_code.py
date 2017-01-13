@@ -36,7 +36,7 @@ def lastmodel():
 
 
 def updatelast(mod):
-    lastMod = mod.copy()
+    lastMod = copy.deepcopy(mod)
     return lastMod
 
 
