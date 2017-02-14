@@ -3,6 +3,7 @@ __author__ = 'Siri'
 import random
 import cobra.test
 import copy
+import gurobipy
 #from cobra import Reaction
 #from cobra import solvers
 
@@ -24,7 +25,7 @@ lastUniverse = universe
 
 
 def biomassproduced(currentmodel):
-    currentmodel.optimize()
+    currentmodel.optimize(gurobipy)
     if currentmodel.solution.status == 'optimal':
         return True
     else:
@@ -128,7 +129,7 @@ def numberofreactions():
 
 
 def numberofblockedreactions():
-    model.optimize()
+    model.optimize(gurobipy)
     blockedReactions = 0
     nModel = len(model.reactions)
     for i in range(0,nModel-1):
