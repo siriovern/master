@@ -151,14 +151,3 @@ def numberofblockedreactions():
             blockedReactions += 1
     return(blockedReactions)
 
-def parallellblocked():
-
-    if __name__ == '__main__':
-        jobs = []
-        for i in range(10):
-            p = multiprocessing.Process(target=numberofblockedreactions(),)
-            jobs.append(p)
-            p.start()
-
-n = parallellblocked()
-print n
