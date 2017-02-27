@@ -1,14 +1,18 @@
 __author__ = 'Siri'
 
 import random
-import cobra.test
+import cobra
 import copy
 import gurobipy
+import cobra.io.mat
+import multiprocessing
 #from cobra import Reaction
 #from cobra import solvers
-
+global startBlocked
+global endBlocked
+global blockedTimes
 #from cobra.io.mat import model_to_pymatbridge
-
+import time
 #import pandas
 #model_to_pymatbridge(m, variable_name="model")
 
@@ -25,7 +29,7 @@ lastUniverse = universe
 
 
 def biomassproduced(currentmodel):
-    currentmodel.optimize(gurobipy)
+    currentmodel.optimize()
     if currentmodel.solution.status == 'optimal':
         return True
     else:
@@ -35,22 +39,29 @@ def biomassproduced(currentmodel):
 def lastmodel():
     universe = copy.deepcopy(lastUniverse)
     model = copy.deepcopy(lastModel)
-    return (len(lastModel.reactions))
+    return len(lastModel.reactions)
 
 
 def updatelast(mod):
+    #FINN: inserted timers
+    #startBlocked = time.time()
     lastMod = copy.deepcopy(mod)
+    #endBlocked = time.time()
+    #FINN: for profiling
+    #print(str(endBlocked - startBlocked) + ",")
     return lastMod
 
 
 def addreaction():
     nModel = len(model.reactions)
     nUniverse = len(universe.reactions)
-    print nModel
+    #print nModel
     global lastModel
     global lastUniverse
+
     lastModel = updatelast(model)
-    lastUniverse = updatelast(universe)
+    #FINN: removed this because yolo
+    #lastUniverse = updatelast(universe)
 
     reactionNr = random.randint(0, nUniverse-1)
     react = (universe.reactions[reactionNr]) #velger tilfeldig reaksjon i universet
@@ -64,11 +75,11 @@ def addreaction():
 def removereaction():
     nModel = len(model.reactions)
     nUniverse = len(universe.reactions)
-    print nModel
+    #print nModel
     global lastModel
-    global lastUniverse
+    #global lastUniverse
     lastModel = updatelast(model)
-    lastUniverse = updatelast(universe)
+    #lastUniverse = updatelast(universe)
     biomassProduced = 0
 
     while biomassProduced == 0:
@@ -129,7 +140,7 @@ def numberofreactions():
 
 
 def numberofblockedreactions():
-    model.optimize(gurobipy)
+    model.optimize()
     blockedReactions = 0
     nModel = len(model.reactions)
     for i in range(0,nModel-1):
@@ -139,3 +150,15 @@ def numberofblockedreactions():
         if upper == 0 and lower == 0:
             blockedReactions += 1
     return(blockedReactions)
+
+def parallellblocked():
+
+    if __name__ == '__main__':
+        jobs = []
+        for i in range(10):
+            p = multiprocessing.Process(target=numberofblockedreactions(),)
+            jobs.append(p)
+            p.start()
+
+n = parallellblocked()
+print n
